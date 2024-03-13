@@ -1,8 +1,35 @@
 import React from 'react'
+import {calculateInvestmentResults, formatter} from '../util/investment'
 
 export default function Results ({result})  {
-    console.log(result)
+    const resultsData = calculateInvestmentResults(result)
+    const initialInvestment = resultsData[0].valueEndOfYear-
+    resultsData[0].interest - resultsData[0].annualInvestment
+
+    
   return (
-    <div>Results</div>
+    <table id='result'>
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Investment</th>
+                <th>Interest</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {resultsData.map((yearData) => {
+                const totalInterest=yearData.valueEndOfYear-yearData.annualInvestment*yearData.year - initialInvestment
+                return (
+                    <tr key={yearData.year}>
+                        <td>{yearData.year}</td>
+                        <td>{formatter.format(yearData.valueEndOfYear)}</td>
+                        <td>{formatter.format(yearData.interest)}</td>
+                        <td>{formatter.format(totalInterest)}</td>
+                    </tr>
+                )
+            })}
+        </tbody>
+    </table>
   )
 }
